@@ -32,10 +32,18 @@ jobs:
               GIT_ADD=
               if [[ ${stats_type} == 'stats' ]]; then
                 curl -sS -o img/${stats_type}_${stats_theme}.svg "https://github-readme-stats.vercel.app/api?username=bittor7x0&include_all_commits=true&count_private=true&show_icons=true&hide=stars&hide_border=true&disable_animations=true&line_height=29&theme=${stats_theme}"
-                [[ $(grep '</svg>' img/${stats_type}_${stats_theme}.svg) && ! $(grep -A1 'data-testid="commits"' img/${stats_type}_${stats_theme}.svg | grep '>0</text>') ]] && GIT_ADD=1
+                # Check that the downloaded file is an SVG file
+                [[ $(grep '</svg>' img/${stats_type}_${stats_theme}.svg) && \
+                # Check that the SVG file is error free (errors are shown using data-testid="message")
+                ! $(grep 'data-testid="message"' img/${stats_type}_${stats_theme}.svg) && \
+                # Check that commits are not zero
+                ! $(grep -A1 'data-testid="commits"' img/${stats_type}_${stats_theme}.svg | grep '>0</text>') ]] && GIT_ADD=1
               elif [[ ${stats_type} == 'langs' ]]; then
                 curl -sS -o img/${stats_type}_${stats_theme}.svg "https://github-readme-stats.vercel.app/api/top-langs/?username=bittor7x0&layout=compact&hide_border=true&langs_count=8&hide=TeX,Smarty,Roff,CSS&disable_animations=true&line_height=28&theme=${stats_theme}"
-                [[ $(grep '</svg>' img/${stats_type}_${stats_theme}.svg) ]] && GIT_ADD=1
+                # Check that the downloaded file is an SVG file
+                [[ $(grep '</svg>' img/${stats_type}_${stats_theme}.svg) && \
+                # Check that the SVG file is error free (errors are shown using data-testid="message")
+                ! $(grep 'data-testid="message"' img/${stats_type}_${stats_theme}.svg) ]] && GIT_ADD=1
               fi
               if [[ -n ${GIT_ADD} ]]; then
                 git add img/${stats_type}_${stats_theme}.svg
