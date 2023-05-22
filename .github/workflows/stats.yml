@@ -63,7 +63,7 @@ jobs:
         if: env.GIT_COMMIT
         run: |
           git commit -qm 'chore: update stats images' \
-                     -qm 'Co-Authored-By: ${{ github.event.sender.login }} <${{ github.event.sender.id }}+${{ github.event.sender.login }}@users.noreply.github.com>'
+                     -qm 'Co-authored-by: bittor7x0 <76845083+bittor7x0@users.noreply.github.com>'
           git show --stat-count=10 HEAD
 
       - name: Git push
